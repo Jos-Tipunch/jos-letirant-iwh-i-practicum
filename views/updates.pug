@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    title= title
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    .container
+      h1 Add a New Robot
+      a.link(href="/") Return to the homepage
+      form(action="/update-cobj", method="POST")
+        .field
+          label(for="name") Name
+          input(type="text", id="name", name="name", required)
+        .field
+          label(for="model") Model
+          input(type="text", id="model", name="model")
+        .field
+          label(for="bio") Bio
+          textarea(id="bio", name="bio", rows="4")
+        button.button(type="submit") Create Robot
