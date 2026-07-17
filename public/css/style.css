@@ -1,61 +1,99 @@
-* { box-sizing: border-box; }
-
+/* On applique une police lisible et sans-serif à toute la page,
+   et on retire les marges par défaut du navigateur */
 body {
-  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  background: #f5f8fa;
-  color: #33475b;
+  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 2rem;
+  padding: 20px;
+  background-color: #f4f4f4;
+  color: #333;
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+/* Le titre principal est mis en avant avec une couleur distincte */
+h1 {
+  color: #1a2209;
+  margin-bottom: 10px;
 }
 
-h1 { color: #ff7a59; }
+/* Le lien (retour ou création) est stylisé comme un petit bouton */
+a {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  background-color: #1a2209;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+}
 
+/* Au survol, le lien s'assombrit légèrement pour indiquer l'interactivité */
+a:hover {
+  background-color: #333;
+}
+
+/* Le tableau prend toute la largeur disponible et fusionne ses bordures */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1.5rem;
+  background-color: #fff;
 }
 
+/* Chaque cellule (en-tête ou donnée) a une bordure fine et un espacement interne */
 th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
   text-align: left;
-  padding: 0.75rem;
-  border-bottom: 1px solid #cbd6e2;
 }
 
-th { background: #eaf0f6; }
-
-.button {
-  display: inline-block;
-  background: #ff7a59;
+/* Les en-têtes de colonnes ont un fond distinct pour les différencier des données */
+th {
+  background-color: #1a2209;
   color: #fff;
-  padding: 0.6rem 1.2rem;
+}
+
+/* On alterne légèrement la couleur des lignes du tableau pour la lisibilité */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Le formulaire est présenté en colonne, avec un espacement entre les champs */
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+/* Les labels sont légèrement espacés au-dessus de leur champ */
+label {
+  margin-top: 10px;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+/* Les champs de saisie (texte et zone de texte) ont un style cohérent */
+input, textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* Le bouton de soumission est mis en valeur avec la couleur principale */
+button {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #1a2209;
+  color: #fff;
   border: none;
   border-radius: 4px;
-  text-decoration: none;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 14px;
 }
 
-.button:hover { background: #ff8f73; }
-
-.link { display: inline-block; margin-bottom: 1rem; color: #0091ae; }
-
-.field { margin-bottom: 1rem; display: flex; flex-direction: column; }
-
-.field label { font-weight: 600; margin-bottom: 0.3rem; }
-
-.field input, .field textarea {
-  padding: 0.5rem;
-  border: 1px solid #cbd6e2;
-  border-radius: 4px;
-  font-size: 1rem;
+/* Au survol, le bouton s'assombrit pour indiquer qu'il est cliquable */
+button:hover {
+  background-color: #333;
 }
