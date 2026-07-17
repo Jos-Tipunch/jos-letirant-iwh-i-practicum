@@ -1,80 +1,72 @@
+// On importe dotenv et on charge immédiatement les variables du fichier .env
+// (PRIVATE_APP_TOKEN et CUSTOM_OBJECT_TYPE) dans process.env
 require('dotenv').config();
+
+// On importe Express, le framework qui va gérer notre serveur web et nos routes
 const express = require('express');
+
+// On importe Axios, la librairie qui nous permet de faire des requêtes HTTP
+// vers l'API HubSpot (GET, POST, etc.)
 const axios = require('axios');
 
+// On crée l'application Express : c'est l'objet principal qu'on va configurer
 const app = express();
 
-// --- Middleware ---
-app.use(express.static(__dirname + '/public'));
-app.use(express.urlencoded({ extended: true }));
+// On définit le port sur lequel le serveur va écouter
+const PORT = 3000;
+
+// On dit à Express d'utiliser le moteur de templates "pug" pour générer le HTML
 app.set('view engine', 'pug');
 
-// --- Config ---
+// On indique où se trouvent les fichiers CSS/JS statiques (dossier "public")
+app.use(express.static('public'));
+
+// Ce middleware permet à Express de comprendre les données envoyées
+// par un formulaire HTML (POST avec du contenu encodé en URL)
+app.use(express.urlencoded({ extended: true }));
+
+// On récupère le token privé HubSpot depuis les variables d'environnement
 const PRIVATE_APP_TOKEN = process.env.PRIVATE_APP_TOKEN;
 
-// Remplace par le fullyQualifiedName ou l'objectTypeId de TON custom object "Robots"
-// (ex: "2-12345678" ou "p12345678_robots"). Voir NOTES.md, etape "Recuperer l'objectTypeId".
-const CUSTOM_OBJECT_TYPE = process.env.CUSTOM_OBJECT_TYPE || 'robots';
+// On récupère l'identifiant du custom object (objectTypeId) depuis .env
+const CUSTOM_OBJECT_TYPE = process.env.CUSTOM_OBJECT_TYPE;
 
-// Les 3 proprietes internes de ton custom object Robots.
-// "name" est obligatoire (string). Adapte les noms internes a ceux crees dans HubSpot.
-const PROPERTIES = ['name', 'model', 'bio'];
-
-const hubspot = axios.create({
+// On crée une instance Axios préconfigurée pour parler à l'API HubSpot :
+// - baseURL évite de réécrire l'URL complète à chaque requête
+// - headers ajoute automatiquement le token d'authentification
+const hubspotClient = axios.create({
   baseURL: 'https://api.hubapi.com',
   headers: {
     Authorization: `Bearer ${PRIVATE_APP_TOKEN}`,
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
-// ============================================================
-// ROUTE 1 — Homepage : GET "/"
-// ============================================================
+// On démarre le serveur : il écoute désormais les requêtes sur le port 3000
+// Route GET / : affiche la page d'accueil avec la liste des enregistrements Robot
 app.get('/', async (req, res) => {
-  const url = `/crm/v3/objects/${CUSTOM_OBJECT_TYPE}?properties=${PROPERTIES.join(',')}`;
   try {
-    const resp = await hubspot.get(url);
-    const records = resp.data.results;
-    res.render('homepage', {
-      title: 'Homepage | Integrating With HubSpot I Practicum',
-      records,
-      properties: PROPERTIES,
-    });
-  } catch (e) {
-    console.error(e.response ? e.response.data : e.message);
-    res.status(500).send('Error fetching custom object records. Check your token and object type.');
+    // On appelle l'API HubSpot CRM v3 pour récupérer les objets de type Robot
+    // ?properties=name,bio,modele précise quelles propriétés on veut recevoir
+    const response = await hubspotClient.get(
+      `/crm/v3/objects/${CUSTOM_OBJECT_TYPE}?properties=name,bio,modele`
+    );
+
+    // On extrait uniquement le tableau des enregistrements depuis la réponse
+    const robots = response.data.results;
+
+    // On envoie ces données au template homepage.pug pour générer le HTML
+    res.render('homepage', { title: 'Robots', robots: robots });
+
+  } catch (error) {
+    // Si une erreur survient (token invalide, objectTypeId incorrect, etc.),
+    // on l'affiche dans la console pour pouvoir la diagnostiquer
+    console.error(error);
+
+    // On renvoie une réponse d'erreur au navigateur
+    res.status(500).send('Une erreur est survenue lors de la récupération des Robots.');
   }
 });
-
-// ============================================================
-// ROUTE 2 — Formulaire : GET "/update-cobj"
-// ============================================================
-app.get('/update-cobj', (req, res) => {
-  res.render('updates', {
-    title: 'Update Custom Object Form | Integrating With HubSpot I Practicum',
-  });
+app.listen(PORT, () => {
+  console.log(`Listening on http://localhost:${PORT}`);
 });
-
-// ============================================================
-// ROUTE 3 — Creation : POST "/update-cobj"
-// ============================================================
-app.post('/update-cobj', async (req, res) => {
-  const newRecord = {
-    properties: {
-      name: req.body.name,
-      model: req.body.model,
-      bio: req.body.bio,
-    },
-  };
-  try {
-    await hubspot.post(`/crm/v3/objects/${CUSTOM_OBJECT_TYPE}`, newRecord);
-    res.redirect('/');
-  } catch (e) {
-    console.error(e.response ? e.response.data : e.message);
-    res.status(500).send('Error creating custom object record.');
-  }
-});
-
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
