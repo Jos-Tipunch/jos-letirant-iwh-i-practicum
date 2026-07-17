@@ -1,7 +1,7 @@
 {
-  "name": "christian-barras-iwh-i-practicum",
+  "name": "jos-letirant-iwh-i-practicum",
   "version": "1.0.0",
-  "description": "HubSpot Integrating With HubSpot I: Foundations practicum",
+  "description": "HubSpot Integrating With HubSpot I Foundations practicum",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
