@@ -1,23 +1,32 @@
 doctype html
-html(lang="en")
+html
   head
-    meta(charset="UTF-8")
+    // On définit le titre de l'onglet du navigateur, à partir de la variable "title"
     title= title
-    link(rel="stylesheet", href="/css/style.css")
+    // On lie la feuille de style CSS présente dans public/css/style.css
+    link(rel='stylesheet', href='/css/style.css')
   body
-    .container
-      h1 My Robots
-      a.button(href="/update-cobj") Add to this table
-      table
-        thead
+    // Titre principal de la page
+    h1 Liste des Robots
+
+    // Lien vers le formulaire de création d'un nouveau Robot
+    a(href='/update-cobj') Créer un nouveau Robot
+
+    // On crée le tableau HTML qui va lister les Robots
+    table
+      thead
+        tr
+          // En-têtes de colonnes correspondant aux 3 propriétés du custom object
+          th Name
+          th Bio
+          th Modèle
+      tbody
+        // Pug boucle sur le tableau "robots" transmis par la route GET /
+        // "robot" représente ici un enregistrement à chaque tour de boucle
+        each robot in robots
           tr
-            each prop in properties
-              th= prop.charAt(0).toUpperCase() + prop.slice(1)
-        tbody
-          each record in records
-            tr
-              each prop in properties
-                td= record.properties[prop]
-          if records.length === 0
-            tr
-              td(colspan=properties.length) No records yet. Add one!
+            // On affiche chaque propriété via robot.properties.[nom_interne]
+            // (c'est la structure renvoyée par l'API HubSpot)
+            td= robot.properties.name
+            td= robot.properties.bio
+            td= robot.properties.modele
