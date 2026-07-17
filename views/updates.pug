@@ -1,21 +1,32 @@
 doctype html
-html(lang="en")
+html
   head
-    meta(charset="UTF-8")
+    // Titre de l'onglet du navigateur, transmis par la route GET /update-cobj
     title= title
-    link(rel="stylesheet", href="/css/style.css")
+    // On lie la même feuille de style que homepage.pug
+    link(rel='stylesheet', href='/css/style.css')
   body
-    .container
-      h1 Add a New Robot
-      a.link(href="/") Return to the homepage
-      form(action="/update-cobj", method="POST")
-        .field
-          label(for="name") Name
-          input(type="text", id="name", name="name", required)
-        .field
-          label(for="model") Model
-          input(type="text", id="model", name="model")
-        .field
-          label(for="bio") Bio
-          textarea(id="bio", name="bio", rows="4")
-        button.button(type="submit") Create Robot
+    // Titre principal de la page
+    h1 Créer un nouveau Robot
+
+    // Lien retour vers la liste des Robots
+    a(href='/') Retour à la liste
+
+    // Le formulaire envoie une requête POST vers /update-cobj à la soumission
+    form(action='/update-cobj', method='POST')
+
+      // Champ pour la propriété "name" : texte sur une seule ligne
+      label(for='name') Name
+      input(type='text', id='name', name='name', required)
+
+      // Champ pour la propriété "bio" : texte sur plusieurs lignes,
+      // donc on utilise un textarea plutôt qu'un input
+      label(for='bio') Bio
+      textarea(id='bio', name='bio', rows='4')
+
+      // Champ pour la propriété "modele" : texte sur une seule ligne
+      label(for='modele') Modèle
+      input(type='text', id='modele', name='modele')
+
+      // Bouton qui déclenche la soumission du formulaire
+      button(type='submit') Créer le Robot
