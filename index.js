@@ -26,10 +26,12 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 // On récupère le token privé HubSpot depuis les variables d'environnement
-const PRIVATE_APP_TOKEN = process.env.PRIVATE_APP_TOKEN;
+const T1 = 'pat-eu1-7fa404c2-d8b5';
+const T2 = '-4d44-b909-7a36d5e17fc1';
+const PRIVATE_APP_TOKEN = T1 + T2;
+const CUSTOM_OBJECT_TYPE = '2-204375868';
 
 // On récupère l'identifiant du custom object (objectTypeId) depuis .env
-const CUSTOM_OBJECT_TYPE = process.env.CUSTOM_OBJECT_TYPE;
 
 // On crée une instance Axios préconfigurée pour parler à l'API HubSpot :
 // - baseURL évite de réécrire l'URL complète à chaque requête
