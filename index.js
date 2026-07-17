@@ -67,6 +67,12 @@ app.get('/', async (req, res) => {
     res.status(500).send('Une erreur est survenue lors de la récupération des Robots.');
   }
 });
+// Route GET /update-cobj : affiche le formulaire pour créer un nouveau Robot
+app.get('/update-cobj', (req, res) => {
+  // On rend simplement le template updates.pug, pas besoin de données HubSpot ici
+  // car c'est juste un formulaire vide à afficher
+  res.render('updates', { title: 'Créer un Robot' });
+});
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });
